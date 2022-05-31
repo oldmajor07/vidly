@@ -1,0 +1,20 @@
+databases:
+  - name: vidly
+    databaseName: db
+    user: vidly
+
+services:
+  - type: web
+    name: vidly
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn vidly.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vidly
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
